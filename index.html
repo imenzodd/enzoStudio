@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090a0f">
+  <meta id="metaDesc" name="description" content="Turn any photo into detailed ASCII art in your browser. Free, private, and easy to export.">
+  <title>Enzo Studio — Turn photos into text art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Enzo Studio home"><span class="brand-mark">E<span>.</span></span><span>ENZO<span class="muted">STUDIO</span></span></a>
+    <div class="top-right">
+      <div class="top-note"><span class="live-dot"></span> <span data-i18n="topNote">Runs locally in your browser</span></div>
+      <a class="github-link" href="#how-it-works"><span data-i18n="howLink">How it works</span><b class="arrow">↗</b></a>
+      <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch language">فارسی</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> <span data-i18n="eyebrow">CREATIVE CODE / IMAGE LAB</span></div>
+      <h1><span class="h1-a" data-i18n="h1a">Your photos,</span><br><span class="dim" data-i18n="h1b">reimagined in text.</span></h1>
+      <p class="hero-copy" data-i18n="heroCopy">Transform any image into a detailed field of characters. Tune the texture, color, and density — then export your creation.</p>
+    </section>
+
+    <section class="workspace" aria-label="ASCII art workspace">
+      <aside class="controls panel">
+        <div class="panel-heading"><div><span class="step">01</span><h2 data-i18n="imageSource">Image source</h2></div><span class="small-tag" data-i18n="tagInput">INPUT</span></div>
+        <label class="upload-zone" id="dropZone" for="imageInput">
+          <input id="imageInput" type="file" accept="image/*">
+          <span class="upload-icon">↑</span>
+          <strong data-i18n="dropTitle">Drop an image here</strong>
+          <span><span data-i18n="or">or</span> <u data-i18n="browse">browse files</u></span>
+          <small data-i18n="formats">JPG, PNG, WEBP · processed on your device</small>
+        </label>
+        <div class="file-info" id="fileInfo" hidden><span class="file-icon">▧</span><span id="fileName">image.png</span><button type="button" id="removeImage" class="icon-button" aria-label="Remove image" data-i18n-aria="removeImage">×</button></div>
+
+        <div class="control-section">
+          <div class="section-label"><label for="density" data-i18n="density">Character density</label><output id="densityValue">110 columns</output></div>
+          <input id="density" type="range" min="45" max="180" value="110">
+          <div class="range-ends"><span data-i18n="less">Less detail</span><span data-i18n="more">More detail</span></div>
+        </div>
+        <div class="control-section">
+          <div class="section-label"><label for="charset" data-i18n="charset">Character set</label></div>
+          <select id="charset">
+            <option value="classic" data-i18n="optClassic">Classic — .:-=+*#%@</option>
+            <option value="detailed" data-i18n="optDetailed">Detailed — full spectrum</option>
+            <option value="blocks" data-i18n="optBlocks">Block shades — ░▒▓█</option>
+            <option value="binary" data-i18n="optBinary">Binary — 0 / 1</option>
+            <option value="soft" data-i18n="optSoft">Soft — .oO@</option>
+            <option value="letters" data-i18n="optLetters">Letters — ASCIIART</option>
+          </select>
+        </div>
+        <div class="control-section">
+          <div class="section-label"><span id="colorModeLabel" data-i18n="colorMode">Color mode</span></div>
+          <div class="segmented" id="colorMode" role="group" aria-labelledby="colorModeLabel">
+            <button type="button" class="segment active" data-mode="mono" data-i18n="modeMono">Monochrome</button>
+            <button type="button" class="segment" data-mode="color" data-i18n="modeColor">Original color</button>
+            <button type="button" class="segment" data-mode="green" data-i18n="modeGreen">Terminal</button>
+          </div>
+        </div>
+        <div class="control-section">
+          <div class="section-label"><label for="contrast" data-i18n="contrast">Contrast</label><output id="contrastValue">1.15×</output></div>
+          <input id="contrast" type="range" min="50" max="200" value="115">
+        </div>
+        <div class="toggle-row"><div><strong data-i18n="invert">Invert brightness</strong><small data-i18n="invertSub">Swap light and dark characters</small></div><label class="switch"><input id="invert" type="checkbox"><span></span></label></div>
+        <div class="toggle-row"><div><strong data-i18n="glow">Glow effect</strong><small data-i18n="glowSub">Subtle terminal-style glow</small></div><label class="switch"><input id="glow" type="checkbox" checked><span></span></label></div>
+        <button type="button" id="reset" class="reset-button">↺ <span data-i18n="reset">Reset settings</span></button>
+      </aside>
+
+      <section class="preview panel">
+        <div class="panel-heading preview-heading"><div><span class="step">02</span><h2 data-i18n="livePreview">Live preview</h2></div><div class="preview-status"><span class="live-dot"></span> <span data-i18n="liveRender">LIVE RENDER</span></div></div>
+        <div class="preview-stage" id="previewStage">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-art" aria-hidden="true"><span> .:-=+*#%@</span><span> .:-=+*#%@</span><span> .:-=+*#%@</span><span> .:-=+*#%@</span><span> .:-=+*#%@</span></div>
+            <h3 data-i18n="emptyTitle">Your canvas is waiting.</h3><p data-i18n="emptyText">Upload a photo to start creating.</p>
+          </div>
+          <pre id="asciiOutput" aria-label="ASCII art preview" hidden></pre>
+        </div>
+        <div class="preview-footer"><span id="dimensions">NO IMAGE LOADED</span><span id="charCount">0 CHARACTERS</span></div>
+        <div class="export-row">
+          <button type="button" class="export-button primary" id="downloadPng" disabled><span class="ico">↓</span> <span data-i18n="exportPng">Export PNG</span></button>
+          <button type="button" class="export-button secondary" id="downloadTxt" disabled><span class="ico">↧</span> <span data-i18n="exportTxt">Export .TXT</span></button>
+          <button type="button" class="export-button secondary square" id="copyText" disabled title="Copy ASCII art" aria-label="Copy ASCII art" data-i18n-title="copy" data-i18n-aria="copy">▣</button>
+        </div>
+        <p class="privacy-note"><span class="star">✳</span> <span data-i18n="privacy">Your image never leaves your device. No upload, no account, no tracking.</span></p>
+      </section>
+    </section>
+
+    <section class="how" id="how-it-works">
+      <div class="how-title"><span class="step">03</span><h2 data-i18n="howTitle">From pixels to poetry.</h2></div>
+      <div class="how-grid">
+        <article><span class="how-number" data-i18n="how1n">01 / INPUT</span><h3 data-i18n="how1t">Choose a photo</h3><p data-i18n="how1p">Portraits, pets, architecture, and high-contrast images work beautifully.</p></article>
+        <article><span class="how-number" data-i18n="how2n">02 / TRANSFORM</span><h3 data-i18n="how2t">Shape the texture</h3><p data-i18n="how2p">Adjust character density, contrast, and color to find your own visual style.</p></article>
+        <article><span class="how-number" data-i18n="how3n">03 / EXPORT</span><h3 data-i18n="how3t">Make it yours</h3><p data-i18n="how3p">Save a shareable PNG or export the raw characters as a text file.</p></article>
+      </div>
+    </section>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-mark">E<span>.</span></span><span>ENZO<span class="muted">STUDIO</span></span></a><span><span data-i18n="footerA">Made for curious minds.</span> <span class="footer-dot">●</span> <span data-i18n="footerB">100% client-side.</span></span></footer>
+  </main>
+  <canvas id="workCanvas" hidden></canvas><canvas id="exportCanvas" hidden></canvas>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
